@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 const faker = require('faker');
 
+const getConnection = require('./../libs/postgres');
+
 class UsersService {
   constructor() {
     this.users = [];
@@ -19,7 +21,9 @@ class UsersService {
   }
 
   async find() {
-    return this.users;
+    const client = await getConnection();
+    const rta = await client.query('SELECT * FROM tasks');
+    return rta.rows;
   }
 
   create(data) {
