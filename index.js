@@ -17,6 +17,7 @@ const whiteList = [
   // 'http://localhost:3000',
   'https://myapp.com',
 ];
+
 const options = {
   origin: (origin, cb) => {
     if (whiteList.includes(origin) || !origin) {
