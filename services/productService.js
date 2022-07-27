@@ -1,6 +1,8 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
 
+const sequelize = require('./../libs/sequelize');
+
 class ProductService {
   constructor() {
     this.products = [];
@@ -18,6 +20,7 @@ class ProductService {
       });
     }
   }
+
   async create(data) {
     const newProduct = {
       id: faker.datatype.uuid(),
@@ -29,7 +32,11 @@ class ProductService {
   }
 
   async find() {
-    return this.products;
+    const query = 'SELECT * FROM task';
+    const [data, metadata] = await sequelize.query(query);
+    return {
+      data,
+    };
   }
 
   async findOne(id) {
