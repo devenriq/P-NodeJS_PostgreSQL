@@ -2,16 +2,10 @@ const boom = require('@hapi/boom');
 const faker = require('faker');
 
 const { models } = require('./../libs/sequelize');
-
-const getConnection = require('./../libs/postgres');
-const pool = require('./../libs/postgresPool');
-
 class UsersService {
   constructor() {
     this.users = [];
     this.generate();
-    this.pool = pool;
-    this.pool.on('error', (err) => console.log(err));
   }
 
   async generate() {
@@ -28,10 +22,6 @@ class UsersService {
   async find() {
     const rta = await models.User.findAll();
     return rta;
-
-    // const client = await getConnection();
-    // const rta = await client.query('SELECT * FROM task');
-    // return rta.rows;
   }
 
   create(data) {

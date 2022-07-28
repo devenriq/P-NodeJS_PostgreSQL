@@ -1,6 +1,8 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
 
+const { models } = require('./../libs/sequelize');
+
 const pool = require('./../libs/postgresPool');
 
 class CategoriesService {
@@ -22,11 +24,8 @@ class CategoriesService {
   }
 
   async find() {
-    const query = 'SELECT * FROM task';
-    const rta = await this.pool.query(query);
-    return rta.rows;
-
-    // return this.categories;
+    const rta = await models.Category.findAll();
+    return rta;
   }
 
   async create(data) {
