@@ -1,6 +1,6 @@
 const express = require('express');
 const ProductService = require('./../services/productService');
-const validatorHandle = require('./../middlewares/validatorHandler');
+const validatorHandler = require('./../middlewares/validatorHandler');
 const {
   createProductSchema,
   updateProductSchema,
@@ -15,13 +15,9 @@ router.get('/', async (req, res) => {
   res.json(products);
 });
 
-router.get('/filter', async (req, res) => {
-  res.send('Yo soy un filter');
-});
-
 router.get(
   '/:id',
-  validatorHandle(getProductSchema, 'params'),
+  validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -35,18 +31,22 @@ router.get(
 
 router.post(
   '/',
-  validatorHandle(createProductSchema, 'body'),
-  async (req, res) => {
-    const body = req.body;
-    const newProduct = await service.create(body);
-    res.status(201).json(newProduct);
+  validatorHandler(createProductSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newProduct = await service.create(body);
+      res.status(201).json(newProduct);
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
 router.patch(
   '/:id',
-  validatorHandle(getProductSchema, 'params'),
-  validatorHandle(updateProductSchema, 'body'),
+  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
